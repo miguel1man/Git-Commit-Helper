@@ -1,6 +1,6 @@
-import subprocess
 import datetime
 import os
+import subprocess
 from dotenv import load_dotenv
 
 
@@ -60,10 +60,17 @@ def git_backup(project_path):
     while True:
         # Mostrar el mensaje de commit actual y pedir confirmación
         print(f"\nMensaje de commit actual: {commit_message}")
-        choice = get_user_choice(
-            "¿Deseas continuar con este mensaje? (y: aceptar, n: cancelar, e: editar): ",
-            ["y", "n", "e"],
+        choice = (
+            input("¿Deseas continuar con este mensaje? ([Y]/n/e): ").lower().strip()
         )
+
+        # Si el usuario solo presiona Enter, asignar 'y' como valor por defecto
+        if choice == "":
+            choice = "y"
+
+        if choice not in ["y", "n", "e"]:
+            print("Opción no válida. Por favor, selecciona 'y', 'n' o 'e'")
+            continue
 
         if choice == "y":
             # Ejecutar git commit
