@@ -44,15 +44,21 @@ def git_backup(project_path):
         print(f"Error: No tienes permisos para acceder al directorio {project_path}.")
         return
 
+    # Ejecutar git status
+    print("\nEjecutando git status:")
+    status_output = run_git_command(["git", "status"])
+
+    # Preguntar si desea continuar después de ver el status
+    choice = input("\n¿Deseas continuar con el backup? ([Y]/n): ").lower().strip()
+    if choice == "n":
+        print("Operación cancelada.")
+        return
+
+    # Si no es 'n', continuar con git add
+    run_git_command(["git", "add", "."])
+
     # Obtener la fecha actual
     current_date = datetime.datetime.now().strftime("%Y-%m-%d")
-
-    # Ejecutar git status
-    print("Ejecutando git status:")
-    run_git_command(["git", "status"])
-
-    # Ejecutar git add .
-    run_git_command(["git", "add", "."])
 
     # Preparar el mensaje de commit
     commit_message = f"backup {current_date}"
