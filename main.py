@@ -44,6 +44,12 @@ def git_backup(project_path):
         print(f"Error: No tienes permisos para acceder al directorio {project_path}.")
         return
 
+    # Mostrar último commit
+    print("\nÚltimo commit:")
+    last_commit = run_git_command(["git", "log", "-1", "--pretty=format:%h - %s"])
+    if last_commit:
+        print("-" * 40)  # Línea separadora para mejor legibilidad
+
     # Ejecutar git status
     print("\nEjecutando git status:")
     status_output = run_git_command(["git", "status"])
