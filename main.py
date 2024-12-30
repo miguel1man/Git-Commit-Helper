@@ -55,7 +55,7 @@ def git_backup(project_path):
     status_output = run_git_command(["git", "status"])
 
     # Preguntar si desea continuar después de ver el status
-    choice = input("\n¿Deseas continuar con el backup? ([Y]/n): ").lower().strip()
+    choice = input("\n¿Desea crear un commit? ([Y]/n): ").lower().strip()
     if choice == "n":
         print("Operación cancelada.")
         return
