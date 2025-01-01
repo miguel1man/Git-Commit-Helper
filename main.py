@@ -54,59 +54,39 @@ def git_backup(project_path):
     print("\nEjecutando git status:")
     status_output = run_git_command(["git", "status"])
 
-    # Preguntar si desea continuar después de ver el status
-    choice = input("\n¿Desea crear un commit? ([Y]/n): ").lower().strip()
-    if choice == "n":
-        print("Operación cancelada.")
-        return
-
-    # Si no es 'n', continuar con git add
-    run_git_command(["git", "add", "."])
-
     # Obtener la fecha actual
     current_date = datetime.datetime.now().strftime("%Y-%m-%d")
 
     # Preparar el mensaje de commit
     commit_message = f"backup {current_date}"
 
+    # Preguntar si desea continuar después de ver el status
+    choice = (
+        input(f"\n¿Desea crear un commit '{commit_message}'? ([Y]/n): ").lower().strip()
+    )
+    if choice == "n":
+        print("Operación cancelada.")
+        return
+
     while True:
-        # Mostrar el mensaje de commit actual y pedir confirmación
-        print(f"\nMensaje de commit actual: {commit_message}")
-        choice = (
-            input("¿Deseas continuar con este mensaje? ([Y]/n/e): ").lower().strip()
-        )
 
         # Si el usuario solo presiona Enter, asignar 'y' como valor por defecto
         if choice == "":
             choice = "y"
 
-        if choice not in ["y", "n", "e"]:
-            print("Opción no válida. Por favor, selecciona 'y', 'n' o 'e'")
+        if choice not in ["y", "n"]:
+            print("Opción no válida. Por favor, selecciona 'y', 'n'")
             continue
 
         if choice == "y":
             # Ejecutar git commit
+            run_git_command(["git", "add", "."])
             run_git_command(["git", "commit", "-m", commit_message])
 
             # Ejecutar git push
             run_git_command(["git", "push"])
             print("Commit y push completados con éxito.")
             break
-
-        elif choice == "n":
-            # Cancelar la operación
-            print("Operación cancelada.")
-            return
-
-        elif choice == "e":
-            # Editar el mensaje de commit
-            new_message = input("Ingresa el nuevo mensaje de commit: ")
-            if new_message.strip():  # Asegurarse de que el nuevo mensaje no esté vacío
-                commit_message = new_message
-            else:
-                print(
-                    "El mensaje de commit no puede estar vacío. Se mantendrá el mensaje anterior."
-                )
 
 
 if __name__ == "__main__":
